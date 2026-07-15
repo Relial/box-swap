@@ -1,4 +1,3 @@
-use mimalloc::MiMalloc;
 use windows::Win32::{
     Foundation::HINSTANCE,
     System::{
@@ -12,9 +11,6 @@ use crate::plugin::{save, unload};
 mod address;
 mod hooks;
 mod plugin;
-
-#[global_allocator]
-static GLOBAL: MiMalloc = MiMalloc;
 
 #[unsafe(no_mangle)]
 extern "system" fn DllMain(hinst: HINSTANCE, fdw_reason: u32, lpv_reserved: *mut ()) -> bool {
