@@ -6,7 +6,7 @@ use windows::Win32::{
     },
 };
 
-use crate::plugin::{save, unload};
+use crate::plugin::unload;
 
 mod address;
 mod hooks;
@@ -18,12 +18,9 @@ extern "system" fn DllMain(hinst: HINSTANCE, fdw_reason: u32, lpv_reserved: *mut
         DLL_PROCESS_ATTACH => {
             let _ = unsafe { DisableThreadLibraryCalls(hinst.into()) };
         }
-        DLL_PROCESS_DETACH => {
-            save();
-            if lpv_reserved.is_null() {
-                // Unloading through FreeLibrary
-                unload();
-            }
+        DLL_PROCESS_DETACH if lpv_reserved.is_null() => {
+            // Unloading through FreeLibrary
+            unload();
         }
         _ => {}
     }
