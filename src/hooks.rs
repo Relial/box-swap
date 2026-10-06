@@ -1,6 +1,7 @@
 use anyhow::Result;
 use bunny_plugin::hook_builder::{NoCbHookBuilder, NoCbHookPoint};
 use ilhook::x86::{HookType, Registers};
+use mhfz_structs::Entity;
 
 use crate::{address::Addresses, plugin::STRUCTS};
 
@@ -10,6 +11,7 @@ unsafe extern "cdecl" fn on_interaction(reg: *mut Registers, _: usize) {
         if (*reg).esi == 0x26
             && let Some(player) = structs.own_player()
             && !player.quest_accepted()
+            && player.area() != 205 // Tore
         {
             (*reg).esi = 0x35;
         }
